@@ -1,0 +1,47 @@
+1: Reset		(input)
+2: CS4 on SH3 		(input) - U2, EEPROM/RTC, Audio
+3: CS5 on SH3		(input) - Not used?
+4: GND
+5: CS6 on SH3		(input) - Blitter
+6: SH3 RD (U4 OE)	(input)	- Pulse low on any read
+7: SH3 WE0 (U4 WE)	(input) - Pulse low on any write
+8: SH3 WAIT		(output) - Always high.
+9: VCC			3.3V
+10: U2 CE		(output) - Pulled low when U2 is in use.
+11: Audio CS		(output) - Pulled low when in use.
+
+12: Blitter out		(output) - Mirrors CS6 input.
+13: Audio PLAY		(input)  - Pulled low when audio is playing. Doesn't seem handled.
+14: Audio RESET		(output) - Low until initialized. Then high.
+15: CLOCK2		(input?) - Clock from FPGA? 
+16: GND
+17: VCC			3.3V
+18: U2 WE		(output) - Pulled low when writing to U2
+19: EEPROM DO		(input)  - Data from EEPROM/RTC. Gets passed on data[0]
+20: EEPROM DI		(output) - Data to EEPROM/RTC. Read from data[0]
+21: EEPROM CLK		(output) - EEPROM clock. Set to data[1] on EEPROM write.
+22: EEPROM CE		(output) - High on EEPROM/RTC use. Set to data[2] on EEPROM write.
+
+23: EEPROM /TIRQ	(input)  - Not used? Always low.
+24: GND
+25: EEPROM FOE		(output) - High until first EEPROM use, then low forever.
+26: Data 3		(bidir)  - Data bit 3. Input unless reading from EEPROM.
+27: Data 2		(bidir)  - Data bit 2. Input unless reading from EEPROM.
+28: Data 1		(bidir)  - Data bit 1. Input unless reading from EEPROM.
+29: VCC			3.3V
+30: Data 0		(bidir)  - Data bit 0. Input unless reading from EEPROM.
+31: A23			(input)  - Address 23. Controls chip select.
+32: A22			(input)  - Address 22. Controls chip select.
+33: A2 (U4 A1)		(input)  - Address 2. Not used?
+
+34: A1 (U2 ALE, U4 A0)	(input)  - Address 1. Controls operation on chip.
+35: A0 (U2 CLE)		(input)  - Address 0. Controls operation on chip.
+36: GND
+37: Clock		(input)  - Clock from CKIO on SH3. ~50Mhz.
+38: Global OE		(input)  - Global OE. See pin#44 routed here.
+39: Global Clear	(input)  - See pin#43 routed here.
+40: OE2			(input)  - See pin#42 routed here.
+41: VCC			3.3V
+42: U2 RE		(output) - Wired to 40 externally. Goes low on U2 Read.
+43: Wired to 39         (output) - Wired to 39 externally. Always low.
+44: Wired to 38		(output) - Wired to 38 externally. High when reading from EEPROM/RTC, otherwise low.
