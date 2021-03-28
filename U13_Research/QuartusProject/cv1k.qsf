@@ -90,14 +90,6 @@ set_global_assignment -name VECTOR_WAVEFORM_FILE u2.vwf
 set_global_assignment -name MAX7000_OPTIMIZATION_TECHNIQUE AREA
 set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS OFF
 set_global_assignment -name AUTO_LCELL_INSERTION OFF
-set_location_assignment PIN_23 -to user_reserve_1
-set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to user_reserve_1
-set_location_assignment PIN_3 -to user_reserve_2
-set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to user_reserve_2
-set_location_assignment PIN_33 -to user_reserve_4
-set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to user_reserve_4
-set_location_assignment PIN_13 -to user_reserve_5
-set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to user_reserve_5
 set_location_assignment PIN_31 -to addr_high[1]
 set_location_assignment PIN_32 -to addr_high[0]
 set_location_assignment PIN_34 -to addr_low[0]
@@ -108,3 +100,11 @@ set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE audio_1.vwf
 set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE eeprom_read_write.vwf
 set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE eeprom_ready_check.vwf
 set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE u2.vwf
+set_location_assignment PIN_23 -to eeprom_tirq
+set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to eeprom_tirq
+set_location_assignment PIN_3 -to cs5
+set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to cs5
+set_location_assignment PIN_33 -to a2
+set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to a2
+set_location_assignment PIN_13 -to audio_play
+set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to audio_play
