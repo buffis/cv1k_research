@@ -1,0 +1,110 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2010 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II
+# Version 9.1 Build 350 03/24/2010 Service Pack 2 SJ Web Edition
+# Date created = 22:29:41  March 10, 2021
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		cv1k_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY MAX7000AE
+set_global_assignment -name DEVICE "EPM7032AETC44-10"
+set_global_assignment -name TOP_LEVEL_ENTITY cv1k
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION "9.1 SP2"
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "22:29:41  MARCH 10, 2021"
+set_global_assignment -name LAST_QUARTUS_VERSION "9.1 SP2"
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (Verilog)"
+set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_simulation
+set_global_assignment -name USE_GENERATED_PHYSICAL_CONSTRAINTS OFF -section_id eda_blast_fpga
+set_global_assignment -name DEVICE_FILTER_PACKAGE "ANY QFP"
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 44
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name VERILOG_FILE cv1k.v
+set_global_assignment -name MISC_FILE "C:/Users/buffi/OneDrive/Documents/quartus/cv1k2/cv1k.dpf"
+set_global_assignment -name MAX7000_ENABLE_JTAG_BST_SUPPORT OFF
+set_global_assignment -name SIMULATION_MODE FUNCTIONAL
+set_global_assignment -name CHECK_OUTPUTS ON
+set_global_assignment -name VECTOR_WAVEFORM_FILE audio_1.vwf
+set_global_assignment -name VECTOR_WAVEFORM_FILE eeprom_ready_check.vwf
+set_global_assignment -name SIMULATOR_GENERATE_POWERPLAY_VCD_FILE ON
+set_global_assignment -name SIMULATOR_POWERPLAY_VCD_FILE_OUTPUT_DESTINATION cv1k.vcd
+set_global_assignment -name VECTOR_WAVEFORM_FILE eeprom_read_write.vwf
+set_global_assignment -name MAX7000_DEVICE_IO_STANDARD "3.3-V LVTTL"
+set_location_assignment PIN_1 -to reset
+set_location_assignment PIN_2 -to cs4
+set_location_assignment PIN_5 -to cs6
+set_location_assignment PIN_6 -to sh3_rd
+set_location_assignment PIN_7 -to sh3_we
+set_location_assignment PIN_8 -to sh3_wait
+set_location_assignment PIN_10 -to u2_ce
+set_location_assignment PIN_11 -to audio_cs
+set_location_assignment PIN_12 -to blitter_out
+set_location_assignment PIN_14 -to audio_reset
+set_location_assignment PIN_15 -to clock2
+set_location_assignment PIN_18 -to u2_we
+set_location_assignment PIN_19 -to eeprom_do
+set_location_assignment PIN_20 -to eeprom_di
+set_location_assignment PIN_21 -to eeprom_clock
+set_location_assignment PIN_22 -to eeprom_ce
+set_location_assignment PIN_25 -to eeprom_foe
+set_location_assignment PIN_26 -to data[3]
+set_location_assignment PIN_27 -to data[2]
+set_location_assignment PIN_28 -to data[1]
+set_location_assignment PIN_30 -to data[0]
+set_location_assignment PIN_37 -to clock
+set_location_assignment PIN_42 -to u2_re
+set_location_assignment PIN_43 -to global_clr
+set_location_assignment PIN_38 -to global_oe
+set_global_assignment -name VECTOR_WAVEFORM_FILE u2.vwf
+set_global_assignment -name MAX7000_OPTIMIZATION_TECHNIQUE AREA
+set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS OFF
+set_global_assignment -name AUTO_LCELL_INSERTION OFF
+set_location_assignment PIN_23 -to user_reserve_1
+set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to user_reserve_1
+set_location_assignment PIN_3 -to user_reserve_2
+set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to user_reserve_2
+set_location_assignment PIN_33 -to user_reserve_4
+set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to user_reserve_4
+set_location_assignment PIN_13 -to user_reserve_5
+set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to user_reserve_5
+set_location_assignment PIN_31 -to addr_high[1]
+set_location_assignment PIN_32 -to addr_high[0]
+set_location_assignment PIN_34 -to addr_low[0]
+set_location_assignment PIN_35 -to addr_low[1]
+set_location_assignment PIN_44 -to eeprom_is_output
+set_global_assignment -name MISC_FILE "C:/Users/buffi/OneDrive/Documents/GitHub/cv1k_research/U13_Research/QuartusProject/cv1k.dpf"
+set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE audio_1.vwf
+set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE eeprom_read_write.vwf
+set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE eeprom_ready_check.vwf
+set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE u2.vwf
