@@ -11,6 +11,7 @@ module cv1k(
 	input clock,                 // From SH-3
 	input clock2,                // From FPGA
 	input cs4,                   // U2, EEPROM/RTC, Audio, Initialize commands
+	input cs5,                   // Unused.
 	input cs6,                   // Blitter
 	input sh3_rd,                // Memory read from SH-3
 	input sh3_we,                // Memory write from SH-3
@@ -19,10 +20,12 @@ module cv1k(
 	output reg u2_re,            // Read from U2 when low
 	output reg u2_we,            // Write to U2 when low
 	input eeprom_do,             // Data from EEPROM/RTC
+	input eeprom_tirq,           // Unused.
 	output reg eeprom_di,        // Data to EEPROM/RTC
 	output reg eeprom_clock,     // Clock for EEPROM/RTC serial transfer
 	output reg eeprom_ce,        // High when EEPROM/RTC is in use
 	output reg eeprom_foe,       // Low except during setup
+	input audio_play,            // Unused.
 	output reg audio_cs,         // Low when communicating with audio IC
 	output audio_reset,          // High except during setup
 	output blitter_out,          // Low on write to blitter
@@ -31,7 +34,8 @@ module cv1k(
 	input global_oe,             // Global output enable. Tied externally to eprom_is_output
 	inout [3:0]data,             // Data bus
 	input [1:0]addr_high,        // A23, A22
-	input [1:0]addr_low          // A1,  A0
+	input [1:0]addr_low,         // A1,  A0
+	input a2                     // Unused.
 	);
 	
 	// Handle state setup.

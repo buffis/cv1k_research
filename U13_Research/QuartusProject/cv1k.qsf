@@ -101,10 +101,6 @@ set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE eeprom_read_write.vw
 set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE eeprom_ready_check.vwf
 set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE u2.vwf
 set_location_assignment PIN_23 -to eeprom_tirq
-set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to eeprom_tirq
 set_location_assignment PIN_3 -to cs5
-set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to cs5
 set_location_assignment PIN_33 -to a2
-set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to a2
 set_location_assignment PIN_13 -to audio_play
-set_instance_assignment -name RESERVE_PIN "AS INPUT TRI-STATED" -to audio_play
