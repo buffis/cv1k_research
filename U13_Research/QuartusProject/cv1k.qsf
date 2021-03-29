@@ -92,8 +92,8 @@ set_global_assignment -name SYNTH_TIMING_DRIVEN_SYNTHESIS OFF
 set_global_assignment -name AUTO_LCELL_INSERTION OFF
 set_location_assignment PIN_31 -to addr_high[1]
 set_location_assignment PIN_32 -to addr_high[0]
-set_location_assignment PIN_34 -to addr_low[0]
-set_location_assignment PIN_35 -to addr_low[1]
+set_location_assignment PIN_35 -to addr_low[0]
+set_location_assignment PIN_34 -to addr_low[1]
 set_location_assignment PIN_44 -to eeprom_is_output
 set_global_assignment -name MISC_FILE "C:/Users/buffi/OneDrive/Documents/GitHub/cv1k_research/U13_Research/QuartusProject/cv1k.dpf"
 set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE audio_1.vwf
