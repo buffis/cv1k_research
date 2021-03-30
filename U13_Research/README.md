@@ -1,6 +1,6 @@
 # U13 Reverse Engineering
 
-![Probes](/pics/probes.jpg "Probes connected to CPLD")
+![Probes](/U13_Research/pics/probes.jpg "Probes connected to CPLD")
 
 ## Background and objectives
 
@@ -101,6 +101,6 @@ Intel no longer hosts this, but you can find it here: https://archive.org/detail
 
 ## Some more pics
 
-![chips](/pics/chips.jpg "Original with two custom")
+![chips](/U13_Research/pics/chips.jpg "Original with two custom")
 
-![soldered](/pics/soldered.jpg "Soldered to board")
+![soldered](/U13_Research/pics/soldered.jpg "Soldered to board")
