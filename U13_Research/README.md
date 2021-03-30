@@ -13,11 +13,11 @@ I managed to produce a bitstream which works as a replacement for the original I
 
 ![Probes](/U13_Research/pics/probes.jpg "Probes connected to CPLD")
 
-## Disclaimer
+## Disclaimers
 
-I'm a hobbyist, and there's highly likely that there will be some mistakes in this documentation. Information here is based on observations with a logic analyzer (Saleae Logic Pro 16).
-
-I have only tested this on CV-1000B boards. It might work on CV-1000D too, but it's untested.
+- !!!Don't attempt to use any of this on one of your PCBs unless you really know what you are doing!!!
+- I'm a hobbyist, and it's highly likely that there will be some mistakes in this documentation.
+- I have only tested this on CV-1000B boards. It might work on CV-1000D too, but it's untested.
 
 ## Description of U13 functionality
 
