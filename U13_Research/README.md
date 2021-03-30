@@ -95,9 +95,13 @@ The data bus is also connected to the 4 pins of P3 closest to the SH-3, which ma
 
 ## Notes on programming CPLD
 
-Since EPM7032 is an old CPLD in the MAX7000 family, you'll have to use a very old Quartus version to be able to program it. I used 9.1 sp2 Free version.
+Since EPM7032 is an old CPLD in the MAX7000 family, you'll have to use a very old Quartus version to be able to compile for it. I used 9.1 sp2 Free version.
 
 Intel no longer hosts this, but you can find it here: https://archive.org/details/91sp-2-quartus-free
+
+This can be programmed to a EPM7032AE in TQFP package using Beeprog2C or any other programmer supporting in-socket programming for this chip (cheap programmers do not).
+
+The file to program is "cv1k.pof".
 
 ## Some more pics
 
