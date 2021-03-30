@@ -9,7 +9,7 @@ The main goals of this project were:
 - Research and document the behavior of this IC.
 - Produce an open source EPM7032 bitstream with the same functions as the original flash, to make it possible to repair CV1000 boards with faulty U13 circuits.
 
-I managed to produce a bitstream which works as a replacement for the original IC, which can be find in the QuartusProject directory of this repo. This should work fine for repairs.
+I managed to produce a bitstream which works as a replacement for the original IC, which can be find in the QuartusProject directory of this repo (cv1k.pof). This should work fine for repairs.
 
 ![Probes](/U13_Research/pics/probes.jpg "Probes connected to CPLD")
 
