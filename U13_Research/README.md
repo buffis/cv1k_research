@@ -1,15 +1,17 @@
-# U13 Reverse Engineering
-
-![Probes](/U13_Research/pics/probes.jpg "Probes connected to CPLD")
+# U13 Reverse Engineering and construction of a compatible bitstream
 
 ## Background and objectives
 
 CV-1000 PCBs does not have any custom ASICs, which makes them quite repairable if something breaks down. The EPM7032 CPLD at U13 however is not dumped, and is written with its protection bit set, making it hard to dump its internal flash. This means that if its internal flash goes bad, the PCB will not start and there's no good way to replace it.
 
-The main goals of this project are:
+The main goals of this project were:
 
 - Research and document the behavior of this IC.
 - Produce an open source EPM7032 bitstream with the same functions as the original flash, to make it possible to repair CV1000 boards with faulty U13 circuits.
+
+I managed to produce a bitstream which works as a replacement for the original IC, which can be find in the QuartusProject directory of this repo. This should work fine for repairs.
+
+![Probes](/U13_Research/pics/probes.jpg "Probes connected to CPLD")
 
 ## Disclaimer
 
