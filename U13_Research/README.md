@@ -17,6 +17,8 @@ I managed to produce a bitstream which works as a replacement for the original I
 
 I'm a hobbyist, and there's highly likely that there will be some mistakes in this documentation. Information here is based on observations with a logic analyzer (Saleae Logic Pro 16).
 
+I have only tested this on CV-1000B boards. It might work on CV-1000D too, but it's untested.
+
 ## Description of U13 functionality
 
 #### Address decoder
