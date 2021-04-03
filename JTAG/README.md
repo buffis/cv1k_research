@@ -12,7 +12,7 @@ I TAKE NO RESPONSIBILITY FOR YOUR HARDWARE. THE INFORMATION HERE SHOULD ONLY BE 
 
 - CV1000 PCB
 - Altera USB Blaster (or clone)
-- Computer running urjtag (see [urjtag_setup.md](urjtag_setup.md) for instructions)
+- Computer running urjtag for SH-3 (see [urjtag_setup.md](urjtag_setup.md) for instructions)
 
 ## CV1000 JTAG Pinout and connections
 

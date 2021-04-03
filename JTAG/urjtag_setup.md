@@ -1,8 +1,10 @@
-# Urjtag setup
+# Urjtag setup for SH-3
 
 While it is possible to compile urjtag with the required dependencies on Windows through Cygwin (I've done so, but it was a pain), I recommend using a Linux machine since it's a lot easier to get working. Instructions below are for a Raspberry Pi 4 running Raspbian.
 
 I had issues with the urjtag package available in Raspbian package manager, so I recommend compiling from source.
+
+In general, this is just a regular urjtag install, but you have to repoint the hitachi part from ar7300 to sh7729.
 
 1. Download latest urjtag
 
