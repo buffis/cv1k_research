@@ -63,3 +63,9 @@ jtag> readmem 0 0x200000 u4.bin
 ```
 sudo python3 K9F1G08U0M_JTAG.py read_all
 ```
+
+## Write U2
+
+**You probably don't want to do this unless you know what you are doing. Overwriting a U2 with bad NAND flash blocks can cause the PCB to no longer work.**
+
+If you still want to do this, you can modify K9F1G08U0M_JTAG.py to support it. Look at the write_page method as a starting point.
