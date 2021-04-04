@@ -20,7 +20,7 @@ I TAKE NO RESPONSIBILITY FOR YOUR HARDWARE. THE INFORMATION HERE SHOULD ONLY BE 
  CV1000 P4
  ________
 |        |
-| 14  13 |  14: GND  13: CV1K RST (VCC TARGET)
+| 14  13 |  14: GND  13: CV1K RST
 | 12  11 |  12: GND  11: TDI
 | 10  9  |  10: GND   9: TMS
 | 8   7      8: NC?   7: ASEBRKAK (Dedicated emulator pin)
@@ -51,7 +51,7 @@ CV1000 S1
 ```
 
 Notes:
-- Hookup CV1K RST to VCC VTARGET
+- Hookup VCC VTARGET to a stable +3.3V source on the board.
 - ASEBRKAK should not be used
 - Only one GND pin needs to be connected
 - Ignore the pins marked N/A on the Altera USB Blaster
