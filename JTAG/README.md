@@ -25,9 +25,17 @@ I TAKE NO RESPONSIBILITY FOR YOUR HARDWARE. THE INFORMATION HERE SHOULD ONLY BE 
 | 10  9  |  10: GND   9: TMS
 | 8   7      8: NC?   7: ASEBRKAK (Dedicated emulator pin)
 | 6   5  |   6: GND   5: TDO
-| 4   3  |   4: GND   3: TRST
+| 4   3  |   4: GND   3: TRST [See note on JTAG mode]
 | 2   1  |   2: GND   1: TCK
 |________|
+
+CV1000 S1
+ ____
+|     |
+|--0--| Normal startup
+|     |
+|  1  | Startup in ASE mode (see reset hold section)
+|_____|
 ```
 
 ```
@@ -47,12 +55,20 @@ Notes:
 - ASEBRKAK should not be used
 - Only one GND pin needs to be connected
 - Ignore the pins marked N/A on the Altera USB Blaster
+- It's good (but not required) to connect TRST to the USB Blaster,  but that pin needs to be used to get the device into JTAG mode. See below.
+
+## Getting the PCB into reset hold mode for JTAG
+
+- Flip the switch at S1 so that the switch is not between the white lines. This will put the device in ASE mode.
+- Hold TRST tied to ground when powering up the PCB to enable "reset hold".
+- When starting up now, the CPU will not start executing instructions, and you can JTAG stuff without worrying about the CPU.
+
+Note that this means that you should not be getting any video output. If the pcb starts showing video, you did something wrong.
 
 ## Dump U4
 
-Start urjtag then:
-
 ```
+sudo jtag
 jtag> cable UsbBlaster
 jtag> detect
 jtag> readmem 0 0x200000 u4.bin
