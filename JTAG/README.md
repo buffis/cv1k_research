@@ -71,7 +71,20 @@ Note that this means that you should not be getting any video output. If the pcb
 sudo jtag
 jtag> cable UsbBlaster
 jtag> detect
+jtag> detectflash 0
 jtag> readmem 0 0x200000 u4.bin
+```
+
+## Write U4
+
+**Note that this will take aprox 2.5 hours.**
+
+```
+sudo jtag
+jtag> cable UsbBlaster
+jtag> detect
+jtag> detectflash 0
+jtag> flashmem 0 u4.bin
 ```
 
 ## Dump U2
@@ -82,6 +95,13 @@ sudo python3 K9F1G08U0M_JTAG.py read_all
 
 ## Write U2
 
+**Note that this will take a very long time (close to 3 days).**
+
 **You probably don't want to do this unless you know what you are doing. Overwriting a U2 with bad NAND flash blocks can cause the PCB to no longer work.**
 
-If you still want to do this, you can modify K9F1G08U0M_JTAG.py to support it. Look at the write_page method as a starting point.
+If you still want to do this, you can modify K9F1G08U0M_JTAG.py to support it. Look at the write_page method as a starting point. None of that is tested yet.
+
+## Special thanks
+
+- rtw: For very helpful discussions on CV1000 hardware. Without him, this project would have taken a lot longer.
+- Anyone working on the mame cv1k.cpp driver which has a lot helpful technical info.
