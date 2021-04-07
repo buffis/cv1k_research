@@ -75,6 +75,8 @@ jtag> detectflash 0
 jtag> readmem 0 0x200000 u4.bin
 ```
 
+Note: For CV1000-D, use 0x400000 instead of 0x200000.
+
 ## Write U4
 
 **Note that this will take aprox 2.5 hours.**
@@ -89,6 +91,8 @@ jtag> flashmem 0 u4.bin
 
 ## Dump U2
 
+**Note that this will take a very long time (close to 3 days).**
+
 ```
 sudo python3 K9F1G08U0M_JTAG.py read_all
 ```
@@ -99,7 +103,7 @@ sudo python3 K9F1G08U0M_JTAG.py read_all
 
 **You probably don't want to do this unless you know what you are doing. Overwriting a U2 with bad NAND flash blocks can cause the PCB to no longer work.**
 
-If you still want to do this, you can modify K9F1G08U0M_JTAG.py to support it. Look at the write_page method as a starting point. None of that is tested yet.
+If you still want to do this, you should be able to use K9F1G08U0M_JTAG.py to do it (write_all command). This is not tested yet (although I've verified that writing individual pages work fine).
 
 ## Special thanks
 
