@@ -117,7 +117,7 @@ sudo python3 RTC9701_JTAG.py read_to_file --filename=eeprom.dump
 This is also pretty quick.
 
 ```
-sudo python3 RTC9701_JTAG.py read_to_file --filename=eeprom.dump
+sudo python3 RTC9701_JTAG.py write_from_file --filename=eeprom.dump
 ```
 
 ## Special thanks
