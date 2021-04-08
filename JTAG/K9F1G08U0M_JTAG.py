@@ -53,35 +53,6 @@ class K9F1G08U0MJtag(object):
         self.cs(0)
         return page
 
-    def block_erase(self, page):
-        """DONT USE THIS UNLESS YOU ARE BRAVE."""
-        print("Erasing page", page)
-        self.cs(1)
-        self.c.poke(CMD_ADDR, 0x60) # Erase command cycle 1
-        self.c.poke(ADDR_ADDR, page & 0xFF)
-        self.c.poke(ADDR_ADDR, (page >> 8) & 0xFF)
-        self.c.poke(CMD_ADDR, 0xD0) # Erase command cycle 2
-        self.c.flush()
-        time.sleep(0.003) # tBERS
-        self.cs(0)
-        return self.read_status()
-
-    def write_page(self, page, data, offset=0):
-        """DONT USE THIS UNLESS YOU ARE BRAVE."""
-        print("Writing page", page)
-        self.cs(1)
-        self.c.poke(CMD_ADDR, 0x80) # Write command cycle 1
-        self.c.poke(ADDR_ADDR, offset & 0xFF)
-        self.c.poke(ADDR_ADDR, (offset>>8) & 0xFF)
-        self.c.poke(ADDR_ADDR, page & 0xFF)
-        self.c.poke(ADDR_ADDR, (page >> 8) & 0xFF)
-        self.c.flush()
-        for d in data:
-            self.c.poke(DATA_ADDR, d & 0xFF)
-        self.c.poke(CMD_ADDR, 0x10) # Write command cycle 2
-        self.cs(0)
-        return self.read_status()
-
     def read_status(self):
         """Reads status of flash. 0 means ok."""
         self.cs(1)
@@ -113,53 +84,9 @@ class JtagProgrammer(object):
             outfile.write(self.jtag.read_page(page))
         outfile.close()
 
-    def write_page(self, infile, page):
-        """DONT USE THIS UNLESS YOU ARE BRAVE."""
-        # Everything about this is a little bit sketchy.
-        # Need to split up the write in four writes, since JTAG is so slow?
-        # There's probably a better way to do it, but this is the easiest
-        # one I've found so far.
-        for i in range(4):
-            data = infile.read(512)
-            status = self.jtag.write_page(page, data, i*512)
-            if status & 1:
-                fail("error writing page:", page)
-            # This is a very big hack.
-            # When doing several writes, the NAND starts returning an error code
-            # indicating it's been write protected after a while. The easiest way
-            # to get around this seems to be to reset the jtag stage by calling detect.
-            # If someone comes up with a better way to do it, let me know.
-            self.jtag.detect()
-
-    def write_all(self, filename, block_start=0, block_end=1024):
-        """DONT USE THIS UNLESS YOU ARE BRAVE."""
-        infile = open(filename, "rb")
-        for block in range(block_start, block_end):
-            # Erases are done at block level, so this will erase the next 64 pages. 
-            print("Erasing block:", block)
-            self.jtag.block_erase(block*64)
-            time.sleep(0.00001)
-
-            print("Writing block:", block)
-            for block_page in range(64):
-                page = block * 64 + block_page
-                print("Writing page:", page)
-                write_page(infile, page)
-
 def fail(msg):
     print("ERROR:", msg)
     sys.exit(1)
-
-def show_scary_warning(cmd_text):
-    print("""WARNING: Writing data to U2 will take aprox 60 hours and is likely to
-cause damage to your PCB unless you know what you're doing.
-
-Command: %s
-
-Do you still want to proceed? (yes/no)""" % cmd_text)
-    i = input()
-    if (i != "yes"):
-        fail("User abort")
 
 if __name__ == "__main__":
     print("Starting")
@@ -176,12 +103,6 @@ if __name__ == "__main__":
     if args.cmd == "read_id":     jtag.read_id()
     elif args.cmd == "read_all":  jtag.read_all(args.filename)
     elif args.cmd == "read_page": jtag.read_page(args.filename, args.page)
-    elif args.cmd == "write_all":
-        show_scary_warning("write_all")
-        jtag.write_all(args.filename)
-    elif args.cmd == "write_block":
-        show_scary_warning("write block: %d" % args.block)
-        jtag.write_all(args.filename, args.block, args.block+1)
     else: fail("Unsupported cmd: %s" % args.cmd)
 
     print("Done.")
