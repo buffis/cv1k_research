@@ -99,11 +99,23 @@ sudo python3 K9F1G08U0M_JTAG.py read_all
 
 ## Write U2
 
-**Note that this will take a very long time (close to 3 days).**
+Currently not supported, since the only way I've been doing it so far feels a bit too hacky.
 
-**You probably don't want to do this unless you know what you are doing. Overwriting a U2 with bad NAND flash blocks can cause the PCB to no longer work.**
+Writing to U2 the same way as reads are done doesn't seem to behave well, without severe hacks. Needs more investigation.
 
-If you still want to do this, you should be able to use K9F1G08U0M_JTAG.py to do it (write_all command). This is not tested yet (although I've verified that writing individual pages work fine).
+## Dump EEPROM
+
+This is pretty quick.
+
+```
+sudo python3 RTC9701_JTAG.py read_to_file --filename=eeprom.dump
+```
+
+## Write to EEPROM 
+
+```
+sudo python3 RTC9701_JTAG.py read_to_file --filename=eeprom.dump
+```
 
 ## Special thanks
 
