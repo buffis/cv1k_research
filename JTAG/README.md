@@ -4,15 +4,17 @@ This page documents how to connect to the JTAG port of CV1000 PCBs, and how to i
 
 **VERY IMPORTANT NOTE: THIS CAN HARM YOUR PCB IF YOU DON'T KNOW WHAT YOU ARE DOING.**
 
-I TAKE NO RESPONSIBILITY FOR YOUR HARDWARE. THE INFORMATION HERE SHOULD ONLY BE CONSIDERED INFORMATIONAL ONLY AND MAY CONTAIN MISTAKES. DON'T USE IT UNLESS YOU UNDERSTAND WHAT IT IS DOING AND ARE WILLING TO DOUBLE CHECK EACH STEP.
+**I TAKE NO RESPONSIBILITY FOR YOUR HARDWARE. THE INFORMATION HERE SHOULD ONLY BE CONSIDERED INFORMATIONAL ONLY AND MAY CONTAIN MISTAKES. DON'T USE IT UNLESS YOU UNDERSTAND WHAT IT IS DOING AND ARE WILLING TO DOUBLE CHECK EACH STEP.**
 
-**This research is WIP, and have not yet been double checked for mistakes**
+**This research is WIP, and have not yet been fully double checked for mistakes**
 
 ## Hardware + software needed
 
 - CV1000 PCB
 - Altera USB Blaster (or clone)
 - Computer running urjtag for SH-3 (see [urjtag_setup.md](urjtag_setup.md) for instructions)
+
+Getting urjtag running with SH-3 takes a bit of extra work so **make sure you read the instructions**.
 
 ## CV1000 JTAG Pinout and connections
 
@@ -62,6 +64,7 @@ Notes:
 - Flip the switch at S1 so that the switch is not between the white lines. This will put the device in ASE mode.
 - Hold TRST tied to ground when powering up the PCB to enable "reset hold".
 - When starting up now, the CPU will not start executing instructions, and you can JTAG stuff without worrying about the CPU.
+- Remove TRST from ground once PCB has started.
 
 Note that this means that you should not be getting any video output. If the pcb starts showing video, you did something wrong.
 
@@ -99,9 +102,7 @@ sudo python3 K9F1G08U0M_JTAG.py read_all
 
 ## Write U2
 
-Currently not supported, since the only way I've been doing it so far feels a bit too hacky.
-
-Writing to U2 the same way as reads are done doesn't seem to behave well, without severe hacks. Needs more investigation.
+Currently not supported, since the only way I've been doing it so far feels a bit too hacky. Writing to U2 the same way as reads are done doesn't seem to behave well, without severe hacks. Needs more investigation + work.
 
 ## Dump EEPROM
 
@@ -113,8 +114,10 @@ sudo python3 RTC9701_JTAG.py read_to_file --filename=eeprom.dump
 
 ## Write to EEPROM 
 
+This is also pretty quick.
+
 ```
-sudo python3 RTC9701_JTAG.py read_to_file --filename=eeprom.dump
+sudo python3 RTC9701_JTAG.py write_from_file --filename=eeprom.dump
 ```
 
 ## Special thanks
