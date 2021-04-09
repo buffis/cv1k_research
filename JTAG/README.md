@@ -104,6 +104,14 @@ sudo python3 K9F1G08U0M_JTAG.py read_all
 
 Currently not supported, since the only way I've been doing it so far feels a bit too hacky. Writing to U2 the same way as reads are done doesn't seem to behave well, without severe hacks. Needs more investigation + work.
 
+## Read U2 Bad Block table
+
+U2 on CV1000 boards come programmed with a bad block table at the start of the U2 rom. You can read which blocks are bad by doing
+
+```
+sudo python3 K9F1G08U0M_JTAG.py bad_blocks
+```
+
 ## Dump EEPROM
 
 This is pretty quick.
