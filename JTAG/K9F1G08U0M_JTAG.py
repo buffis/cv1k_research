@@ -84,6 +84,24 @@ class JtagProgrammer(object):
             outfile.write(self.jtag.read_page(page))
         outfile.close()
 
+    def read_bad_block_table(self):
+        page = self.jtag.read_page(0)
+        bad_block_table = page[8:8+128]
+        block = 0
+        bad_blocks = []
+        for x in bad_block_table:
+            if x == 0xFF:
+                block += 8
+                continue
+            for i in range(8):
+                if ((x >> i) & 1) == 0:
+                    bad_blocks.append(block)
+                block += 1
+        if not bad_blocks:
+            print ("No bad blocks!")
+        else:
+            print ("Found bad blocks:", str(bad_blocks))
+
 def fail(msg):
     print("ERROR:", msg)
     sys.exit(1)
@@ -103,6 +121,7 @@ if __name__ == "__main__":
     if args.cmd == "read_id":     jtag.read_id()
     elif args.cmd == "read_all":  jtag.read_all(args.filename)
     elif args.cmd == "read_page": jtag.read_page(args.filename, args.page)
+    elif args.cmd == "bad_blocks": jtag.read_bad_block_table()
     else: fail("Unsupported cmd: %s" % args.cmd)
 
     print("Done.")
