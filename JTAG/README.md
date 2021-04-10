@@ -92,26 +92,6 @@ jtag> detectflash 0
 jtag> flashmem 0 u4.bin
 ```
 
-## Dump U2
-
-**Note that this will take a very long time (close to 3 days).**
-
-```
-sudo python3 K9F1G08U0M_JTAG.py read_all
-```
-
-## Write U2
-
-Currently not supported, since the only way I've been doing it so far feels a bit too hacky. Writing to U2 the same way as reads are done doesn't seem to behave well, without severe hacks. Needs more investigation + work.
-
-## Read U2 Bad Block table
-
-U2 on CV1000 boards come programmed with a bad block table at the start of the U2 rom. You can read which blocks are bad by doing
-
-```
-sudo python3 K9F1G08U0M_JTAG.py bad_blocks
-```
-
 ## Dump EEPROM
 
 This is pretty quick.
@@ -127,6 +107,46 @@ This is also pretty quick.
 ```
 sudo python3 RTC9701_JTAG.py write_from_file --filename=eeprom.dump
 ```
+
+## Dump U2
+
+**Note that this will take a very long time (close to 3 days).**
+
+```
+sudo python3 K9F1G08U0M_JTAG.py read_all
+```
+
+## Read U2 Bad Block table
+
+U2 on CV1000 boards come programmed with a bad block table at the start of the U2 rom. You can read which blocks are bad by doing
+
+```
+sudo python3 K9F1G08U0M_JTAG.py bad_blocks
+```
+
+## Write U2
+
+**This is by far the most scary thing you can do over JTAG, and can easily make your PCB not work. Do not do this unless you know what you're doing. Seriously. Also it takes about 3 days.**
+
+**I have only partially verified this so far. Use at your own risk.**
+
+To write to U2, we will need to make sure the WP signal of U2 stays high. This is tied to CE2A on the SH-3.
+I haven't found a good way to do that through the Python binding, so the eaiest way to do it is to modify /usr/local/share/urjtag/hitachi/sh7729/sh7729 by adding the following lines at the bottom:
+
+```
+# Add to /usr/local/share/urjtag/hitachi/sh7729/sh7729
+shift ir
+set signal CE2A out 1
+shift dr
+```
+
+Once you've done this, you can write to U2 doing:
+
+```
+sudo python3 K9F1G08U0M_JTAG.py write_all --filename=u2.dump
+```
+
+This will read the invalid block table from the start of U2 and disallow the writes if any bad blocks are present, since that would likely cause issues when programming.
 
 ## Special thanks
 

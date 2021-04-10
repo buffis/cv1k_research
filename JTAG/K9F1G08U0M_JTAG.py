@@ -1,4 +1,5 @@
 import argparse
+import time
 import sys
 import urjtag
 
@@ -53,6 +54,34 @@ class K9F1G08U0MJtag(object):
         self.cs(0)
         return page
 
+    def block_erase(self, page):
+        """DONT USE THIS UNLESS YOU ARE BRAVE."""
+        print("Erasing page", page)
+        self.cs(1)
+        self.c.poke(CMD_ADDR, 0x60) # Erase command cycle 1
+        self.c.poke(ADDR_ADDR, page & 0xFF)
+        self.c.poke(ADDR_ADDR, (page >> 8) & 0xFF)
+        self.c.poke(CMD_ADDR, 0xD0) # Erase command cycle 2
+        self.c.flush()
+        time.sleep(0.3) # tBERS
+        self.cs(0)
+        return self.read_status()
+
+    def write_page(self, page, data, offset=0):
+        """DONT USE THIS UNLESS YOU ARE BRAVE."""
+        print("Writing page", page)
+        self.cs(1)
+        self.c.poke(CMD_ADDR, 0x80) # Write command cycle 1
+        self.c.poke(ADDR_ADDR, offset & 0xFF)
+        self.c.poke(ADDR_ADDR, (offset>>8) & 0xFF)
+        self.c.poke(ADDR_ADDR, page & 0xFF)
+        self.c.poke(ADDR_ADDR, (page >> 8) & 0xFF)
+        for d in data:
+            self.c.poke(DATA_ADDR, d & 0xFF)
+        self.c.poke(CMD_ADDR, 0x10) # Write command cycle 2
+        self.cs(0)
+        return self.read_status()
+
     def read_status(self):
         """Reads status of flash. 0 means ok."""
         self.cs(1)
@@ -101,16 +130,53 @@ class JtagProgrammer(object):
             print ("No bad blocks!")
         else:
             print ("Found bad blocks:", str(bad_blocks))
+        return bad_blocks
+
+    def write_page(self, infile, page):
+        """DONT USE THIS UNLESS YOU ARE BRAVE."""
+        data = infile.read(2112)
+        status = self.jtag.write_page(page, data, 0)
+        if status & 1:
+            fail("error writing page:", page)
+        print ("Status", status)
+
+    def write_blocks(self, filename, block_start=0, block_end=1024):
+        """DONT USE THIS UNLESS YOU ARE BRAVE."""
+        infile = open(filename, "rb")
+        for block in range(block_start, block_end):
+            # Erases are done at block level, so this will erase the next 64 pages. 
+            print("Erasing block:", block)
+            self.jtag.cs(1)
+            erase_status = self.jtag.block_erase(block*64)
+            print ("Erase status:", erase_status)
+            time.sleep(0.00001) # Probably not needed.
+            self.jtag.cs(0)
+
+            print("Writing block:", block)
+            for block_page in range(64):
+                page = block * 64 + block_page
+                print("Writing page:", page)
+                self.jtag.cs(1)
+                status = self.jtag.write_page(page, infile.read(2112))
+                print ("Write status:", status)
+                self.jtag.cs(0)
 
 def fail(msg):
     print("ERROR:", msg)
     sys.exit(1)
 
+def show_scary_warning():
+    print ("""This operation can easily harm your PCB.
+If you are sure you want to do this, please enter "I know this can harm my pcb" to continue.""")
+    x = input()
+    if x != "I know this can harm my pcb":
+        fail("User aborted")
+
 if __name__ == "__main__":
     print("Starting")
     p = argparse.ArgumentParser()
     p.add_argument('cmd', type=str)
-    p.add_argument('--filename', type=str, default='data.bin')
+    p.add_argument('--filename', type=str)
     p.add_argument('--block', type=int, default=0)
     p.add_argument('--page', type=int, default=0)
     args = p.parse_args()
@@ -122,6 +188,18 @@ if __name__ == "__main__":
     elif args.cmd == "read_all":  jtag.read_all(args.filename)
     elif args.cmd == "read_page": jtag.read_page(args.filename, args.page)
     elif args.cmd == "bad_blocks": jtag.read_bad_block_table()
+    elif args.cmd == "write_block":
+        show_scary_warning()
+        bad_blocks = jtag.read_bad_block_table()
+        if bad_blocks:
+            fail("Write not supported for PCB with bad U2 blocks: %s" % str(bad_blocks))
+        jtag.write_blocks(args.filename, args.block, args.block+1)
+    elif args.cmd == "write_all":
+        show_scary_warning()
+        bad_blocks = jtag.read_bad_block_table()
+        if bad_blocks:
+            fail("Write not supported for PCB with bad U2 blocks: %s" % str(bad_blocks))
+        jtag.write_blocks(args.filename, 0, 1024)
     else: fail("Unsupported cmd: %s" % args.cmd)
 
     print("Done.")
