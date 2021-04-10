@@ -128,7 +128,7 @@ sudo python3 K9F1G08U0M_JTAG.py bad_blocks
 
 **This is by far the most scary thing you can do over JTAG, and can easily make your PCB not work. Do not do this unless you know what you're doing. Seriously. Also it takes about 3 days.**
 
-**I have only partially verified this so far. Use at your own risk.**
+**I have only partially verified this so far. Use at your own risk. I DON*T RECOMMEND TRYING THIS BASICALLY.**
 
 To write to U2, we will need to make sure the WP signal of U2 stays high. This is tied to CE2A on the SH-3.
 I haven't found a good way to do that through the Python binding, so the eaiest way to do it is to modify /usr/local/share/urjtag/hitachi/sh7729/sh7729 by adding the following lines at the bottom:
