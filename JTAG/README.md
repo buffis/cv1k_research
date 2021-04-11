@@ -113,7 +113,7 @@ sudo python3 RTC9701_JTAG.py write_from_file --filename=eeprom.dump
 **Note that this will take a very long time (close to 3 days).**
 
 ```
-sudo python3 K9F1G08U0M_JTAG.py read_all
+sudo python3 K9F1G08U0M_JTAG.py read_all --filename=u2.dump
 ```
 
 ## Read U2 Bad Block table
