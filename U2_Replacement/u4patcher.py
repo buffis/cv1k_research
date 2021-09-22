@@ -14,6 +14,6 @@ if __name__ == "__main__":
         sys.exit(1)
     print ("Found check at ", i)
     data[i]  = data[i]  - 1
-    data[16] = data[16] - 1
+    data[i + 16] = data[i + 16] - 1
     infile.close()
     print ("Successfully patched.")

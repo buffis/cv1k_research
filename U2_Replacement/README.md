@@ -12,6 +12,7 @@ Get the following tools:
 
 - u4patcher.py (this dir)
 - compress.py (from U4_Utils)
+- compress_data_extract.py (from U4_Utils)
 - swap.py (from U4_Utils)
 
 For roms not using compression:
