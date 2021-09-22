@@ -79,4 +79,4 @@ At startup, CV1000 games does the following check for Flash IC's that are compat
 The patcher simply replaces the last check (for 0xEC 0xF1) to always return true. U4 contents are compressed for most CV1000 games (not the first few), which means that for those, the data part needs to be decompressed and then compressed back.
 
 ## Thanks to
-- Enrico Pozzobon: Initial reverse engineering of U4 compression, help with Ghidra.
+- Enrico: Initial reverse engineering of U4 compression, help with Ghidra.
