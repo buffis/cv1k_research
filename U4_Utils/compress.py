@@ -1,6 +1,7 @@
 import sys
 import mmap
 import math
+import io
 
 ##
 ## Stuff for working with CV1000 compression.
@@ -16,9 +17,7 @@ import math
 ## - Place data at offset 0x51000
 ##
 
-def decompress(infile, outfile):
-    in_data = mmap.mmap(infile.fileno(), 0)
-
+def decompress(in_data):
     def _read_int_32(src, offset):
         return int.from_bytes(src[offset:offset+4], "big")
     output_size =    _read_int_32(in_data, 0)
@@ -60,13 +59,11 @@ def decompress(infile, outfile):
         bitflags_count -= 1
         bitflag_byte <<= 1
     
-    outfile.write(out_data.read())
     print ("Wrote: ", hex(out_data.size()), " expected: ", hex(output_size))
-    return output_size
+    return out_data.read()
 
-def compress(infile, outfile):
-    in_data = mmap.mmap(infile.fileno(), 0)
-    out_data = mmap.mmap(-1, in_data.size())
+def compress(in_data):
+    out_data = mmap.mmap(-1, len(in_data))
     bitmasks = mmap.mmap(-1, 1000000)  # Just picked a big number. RAM is cheap.
 
     # TODO: Better docstring.
@@ -78,7 +75,7 @@ def compress(infile, outfile):
         
         # Normally it's fine to look up to 33 bytes ahead of the
         # search pointer for expansions
-        search_end = min(in_ptr + 33, in_data.size())
+        search_end = min(in_ptr + 33, len(in_data))
         # ... but at the start of the input, this is not allowed for some reason.
         # Not obvious to me why this edgecase is in place, but otherwise the compressed
         # data will not match what's on PCBs.
@@ -90,7 +87,7 @@ def compress(infile, outfile):
         hit = (-1, 0)  # No hit.
         for x in range (3, 0x1F+4):
             # Don't look further in memory map than the file size.
-            if in_ptr + x > in_data.size():
+            if in_ptr + x > len(in_data):
                 break
 
             # Look for matches that start at least one character before in_ptr.
@@ -107,7 +104,7 @@ def compress(infile, outfile):
     output_size = 0
     num_bitflags = 0
     bitdata = 0
-    while (in_ptr < in_data.size()):
+    while (in_ptr < len(in_data)):
         h = _find_data(in_ptr)
         if h[0] == -1:
             # No earlier matches, raw write.
@@ -142,6 +139,8 @@ def compress(infile, outfile):
     print ("Output size:", output_size)
     print ("Num bitflags:", num_bitflags)
     print ("Data offset:", data_offset)
+
+    outfile = io.BytesIO()
     outfile.write(output_size.to_bytes(4, 'big'))
     outfile.write(num_bitflags.to_bytes(4, 'big'))
     outfile.write(data_offset.to_bytes(4, 'big'))
@@ -150,13 +149,17 @@ def compress(infile, outfile):
     
     out_data.seek(0)
     outfile.write(out_data.read(out_ptr))
+    outfile.seek(0)
+    return outfile.read()
 
 if __name__ == "__main__":
     infile = open(sys.argv[1], "r+b")
     outfile = open(sys.argv[2], "wb")
     if sys.argv[3] == "c":
-        compress(infile, outfile)
+        compressed = compress(infile.read())
+        outfile.write(compressed)
     elif sys.argv[3] == "d":
-        decompress(infile, outfile)
+        decompressed = decompress(infile.read())
+        outfile.write(decompressed)
     infile.close()
     outfile.close()
