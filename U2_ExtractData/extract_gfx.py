@@ -97,6 +97,7 @@ def get_u2_data(infile_name):
     metadata.read_from(infile_name)
     for i in range(metadata.num_entries):    
         data = metadata.get_entry_data(infile_name, i)
+        print ("Fetching", i)
         Bitmap(data).write_to_png(infile_name + "_out/u2_" + str(i) + ".png")
 
 if __name__ == "__main__":
