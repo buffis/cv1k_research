@@ -1,0 +1,6 @@
+*out/
+tmp/
+__pycache__
+
+# Tracked elsewhere
+compress*
