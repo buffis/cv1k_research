@@ -59,7 +59,8 @@ def decompress(in_data):
         bitflags_count -= 1
         bitflag_byte <<= 1
     
-    print ("Wrote: ", hex(out_data.size()), " expected: ", hex(output_size))
+    print ("Wrote: ", hex(out_ptr), " expected: ", hex(output_size))
+    assert out_ptr == output_size
     return out_data.read()
 
 def compress(in_data):
