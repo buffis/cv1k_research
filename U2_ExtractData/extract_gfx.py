@@ -21,6 +21,9 @@ BLOCK_LEN = 2112 * 64
 def block_addr(block, offset=0):
     return BLOCK_LEN * block + offset
 
+def get_block(offset):
+    return offset // BLOCK_LEN
+
 def get_int32(infile):
     return int.from_bytes(infile.read(4), "big")
 
@@ -54,9 +57,46 @@ class U2Metadata(object):
     def __init__(self):
         self.data = {}
         self.num_entries = 0
+        self.bad_blocks = []
+    def _read_bad_block_table(self, infile):
+        bad_block_table = infile.read(PAGE_LEN)[8: 8 + 128]
+        i = 0
+        for b in bad_block_table:
+            for _ in range(8):
+                if not b & 1:
+                    self.bad_blocks.append(i)
+                b >>= 1
+                i += 1
+    def _read_data(self, infile, start_block, offset, length):
+        """Read data from infile, respecting bad blocks."""
+        end_block = get_block(block_addr(start_block, offset + length - 1))
+        assert start_block not in self.bad_blocks, "Trying to read from bad block."
+            
+        start_addr = block_addr(start_block, offset) 
+        infile.seek(start_addr)
+        if end_block not in self.bad_blocks:
+            return infile.read(length)
+        else:
+            # Read rest from starting block.
+            bytes_from_start_block = block_addr(start_block + 1) - start_addr
+            data1 = infile.read(bytes_from_start_block)
+
+            # Skip ahead to next working block
+            while end_block in self.bad_blocks:
+                end_block += 1
+
+            # Read rest of data from second block. Assume reads don't span three blocks.
+            # TODO: Support reads across more than 2 blocks?
+            infile.seek(block_addr(end_block))
+            assert length - bytes_from_start_block < BLOCK_LEN, "Read across three blocks"
+            data2 = infile.read(length - bytes_from_start_block)
+            return data1 + data2
+
     def read_from(self, filename):
         infile = open(filename, "rb")
-        self.bad_block_table = infile.read(PAGE_LEN)
+        self._read_bad_block_table(infile)
+        if self.bad_blocks:
+            print ("Found bad blocks:", self.bad_blocks)
     
         while True:
             block = get_int32(infile)
@@ -75,8 +115,7 @@ class U2Metadata(object):
     def get_entry_data(self, filename, entry_no):
         infile = open(filename, "rb")
         block, offset, length, compression_info = self.data[entry_no]
-        infile.seek(block_addr(block, offset))
-        data = infile.read(length)
+        data = self._read_data(infile, block, offset, length)
         if compression_info == 0: # Raw
             return data
         elif compression_info == 0x2000000: # Compressed
