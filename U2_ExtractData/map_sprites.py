@@ -1,47 +1,8 @@
-import png
+# Important: This file is WIP. Not really ready for use yet.
+
 import glob
 import sys
-
-#################
-#################
-################# EXPERIMENTAL WIP
-################# DO NOT USE. DOESNT WORK YET
-#################
-#################
-
-def flatten(t): return [item for sublist in t for item in sublist]
-
-class Bitmap(object):
-    def __init__(self, name, sx, sy):
-        self.name = name
-        self.sx = sx
-        self.sy = sy
-        self.data = [[0] * sx * 4 for y in range(sy)]
-    def set_pixel(self, x, y, data, sx=0):
-        if y >= self.sy:
-            y -= self.sy
-            x -= sx
-        self.data[y][x*4: x*4+4] = data
-    def get_pixel(self, x, y, sx=9999):
-        if y >= self.sy:
-            y -= self.sy
-            x -= sx
-        return self.data[y][x*4: x*4+4]
-    def write_to_png(self):
-        f=open(self.name, "wb")
-        w = png.Writer(self.sx, self.sy, greyscale=False, alpha=True)
-        w.write(f, self.data)
-        f.close()
-
-def make_bitmap_from_file(filename):
-    reader = png.Reader(filename).asRGBA()
-    (w, h, data) = reader[:3]
-    data = [list(y) for y in data]
-    bitmap = Bitmap(filename, w, h)
-    for y in range(h):
-        for x in range(w):
-            bitmap.set_pixel(x, y, data[y][x*4:x*4+4])    
-    return bitmap
+from gfx_utils import *
 
 def remap(infile):
     inputs = {}
@@ -57,10 +18,10 @@ def remap(infile):
             name = data[1]
             w,h = map(int, data[2:])
             print ("Added output with name", name, "size:",w,"x",h)
-            outputs[name] = Bitmap(name, w, h)
+            outputs[name] = Bitmap(w, h)
         if cmd == "input":
             name = data[1]
-            inputs[name] = make_bitmap_from_file(name)
+            inputs[name] = Bitmap.from_png(name)
         if cmd == "map":
             infile,outfile = data[1:3]
             sx,sy,sw,sh,tx,ty = map(int, data[3:])
@@ -75,7 +36,7 @@ def remap(infile):
                 for x_off, x in enumerate(range(sx,sx+sw)):
                     outfile.set_pixel(tx+x_off,ty+y_off,infile.get_pixel(x,y,sw))
     for output in outputs:
-        outputs[output].write_to_png()
+        outputs[output].write_to_png(output)
 
 def map_back(infile):
     inputs = {}
@@ -92,10 +53,10 @@ def map_back(infile):
             name = data[1]
             w,h = map(int, data[2:])
             print ("Added output with name", name, "size:",w,"x",h)
-            outputs[name] = make_bitmap_from_file(name)
+            outputs[name] = Bitmap.from_png(name)
         if cmd == "input":
             name = data[1]
-            inputs[name] = Bitmap(name.split(".")[0] + "_remap.png", 256, 256) # TODO: Fix size
+            inputs[name] = Bitmap(256, 256) # TODO: Fix size
         if cmd == "map":
             infile,outfile = data[1:3]
             sx,sy,sw,sh,tx,ty = map(int, data[3:])
@@ -110,11 +71,14 @@ def map_back(infile):
                 for x_off, x in enumerate(range(sx,sx+sw)):
                     infile.set_pixel(x,y,outfile.get_pixel(tx+x_off,ty+y_off),sw)
     for input in inputs:
-        inputs[input].write_to_png()
+        inputs[input].write_to_png(input)
                     
 
 if __name__ == "__main__":
     infile = open(sys.argv[1])
-    map_back(infile)
+    if len(sys.argv) > 2 and sys.argv[2] == "back":
+        map_back(infile)
+    else:
+        remap(infile)
     infile.close()
     

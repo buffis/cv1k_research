@@ -13,6 +13,9 @@ def get_block(offset):
 def get_int32(infile):
     return int.from_bytes(infile.read(4), "big")
 
+def flatten(t):
+    return [item for sublist in t for item in sublist]
+
 class Bitmap(object):
     def __init__(self, width, height, data=None):
         self.width = width
