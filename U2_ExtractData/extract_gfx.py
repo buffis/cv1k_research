@@ -11,53 +11,16 @@
 
 import sys
 import os
-import png
 # From U4_Utils
 import compress
-
-PAGE_LEN  = 2112
-BLOCK_LEN = 2112 * 64
-
-def block_addr(block, offset=0):
-    return BLOCK_LEN * block + offset
-
-def get_block(offset):
-    return offset // BLOCK_LEN
-
-def get_int32(infile):
-    return int.from_bytes(infile.read(4), "big")
-
-class Bitmap(object):
-    def __init__(self, data, compressed=False):
-        self.png_data = []
-        self.width = ((data[12] << 8) | data[13]) + 1
-        self.height = ((data[14] << 8) | data[15]) + 1
-        i = 16 # Initial offset
-
-        for h in range(self.height):
-            row = []
-            for w in range(self.width):
-                row.extend(self._get_clr(data[i:i+2]))
-                i += 2
-            self.png_data.append(row)
-        
-    def _get_clr(self, x):
-        a = 255 if (x[0] >> 7) else 0
-        r = 8 * ((x[0] >> 2) & 0b11111)
-        g = 8 * (((x[0] & 0b11) << 3) | (x[1] >> 5))
-        b = 8 * (x[1] & 0b11111)
-        return (r,g,b,a)
-    def write_to_png(self, filename):
-        f=open(filename, "wb")
-        w = png.Writer(self.width, self.height, greyscale=False, alpha=True)
-        w.write(f, self.png_data)
-        f.close()
+from gfx_utils import *
         
 class U2Metadata(object):
     def __init__(self):
         self.data = {}
         self.num_entries = 0
         self.bad_blocks = []
+
     def _read_bad_block_table(self, infile):
         bad_block_table = infile.read(PAGE_LEN)[8: 8 + 128]
         i = 0
@@ -67,6 +30,7 @@ class U2Metadata(object):
                     self.bad_blocks.append(i)
                 b >>= 1
                 i += 1
+
     def _read_data(self, infile, start_block, offset, length):
         """Read data from infile, respecting bad blocks."""
         end_block = get_block(block_addr(start_block, offset + length - 1))
@@ -112,6 +76,7 @@ class U2Metadata(object):
             self.num_entries += 1
         print ("Found %d entries" % self.num_entries)
         infile.close()
+
     def get_entry_data(self, filename, entry_no):
         infile = open(filename, "rb")
         block, offset, length, compression_info = self.data[entry_no]
@@ -136,8 +101,7 @@ def get_u2_data(infile_name):
     metadata.read_from(infile_name)
     for i in range(metadata.num_entries):    
         data = metadata.get_entry_data(infile_name, i)
-        print ("Fetching", i)
-        Bitmap(data).write_to_png(infile_name + "_out/u2_" + str(i) + ".png")
+        Bitmap.from_u2_data(data).write_to_png(infile_name + "_out/u2_" + str(i) + ".png")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2: print ("Please specify U2 file as input")
