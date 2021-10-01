@@ -1,7 +1,11 @@
+*.png
+*.txt
+*.bin
+*.data
 *out/
 *in/
 tmp/
 __pycache__
 
 # Tracked elsewhere
-compress*
+compress.py
