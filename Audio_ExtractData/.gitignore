@@ -1,0 +1,9 @@
+in/*
+out/*
+*u23*
+*u24*
+*.mp2
+*.exe
+
+# Tracked elsewhere
+swap.py
