@@ -56,7 +56,7 @@ def map_back(infile):
             outputs[name] = Bitmap.from_png(name)
         if cmd == "input":
             name = data[1]
-            inputs[name] = Bitmap(256, 256) # TODO: Fix size
+            inputs[name] = Bitmap.from_png(name)
         if cmd == "map":
             infile,outfile = data[1:3]
             sx,sy,sw,sh,tx,ty = map(int, data[3:])
