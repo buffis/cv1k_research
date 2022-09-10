@@ -3,7 +3,9 @@
 
 import sys
 import os
+from telnetlib import NOP
 import swap
+import hashlib
 
 def to_byte(x, size=1): return x.to_bytes(size, byteorder="big")
 
@@ -146,12 +148,21 @@ if __name__ == "__main__":
         print ("Please specify u23 and u24 files as inputs")
         sys.exit(1)
     u23, u24 = sys.argv[1], sys.argv[2]
-    
+
+    dump_metadata = len(sys.argv) == 4 and sys.argv[3] == "metadata"
+
     try: os.mkdir("out")
     except: pass
 
     a = AudioData(u23, u24)
     a.read_header()
+
+    meta = open("metadata.txt", "w")
     for i in range (256):
-        m = AmmMpeg(a.get_phrase_data(i))
-        m.to_mp2("out/"+ str(i) + ".mp2")
+        data = a.get_phrase_data(i)
+        if dump_metadata:
+            meta.write(str(i) + " " + hashlib.md5(data).hexdigest() + "\n")
+        else:
+            m = AmmMpeg(data)
+            m.to_mp2("out/"+ str(i) + ".mp2")
+    meta.close()
