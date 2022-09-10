@@ -4,6 +4,7 @@ out/*
 *u24*
 *.mp2
 *.exe
+*.txt
 
 # Tracked elsewhere
 swap.py
