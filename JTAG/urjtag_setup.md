@@ -13,7 +13,7 @@ Available here: https://sourceforge.net/projects/urjtag/
 2. Download dependencies
 
 ```
-sudo apt-get install libusb-1.0-0-dev libftdi1-dev
+sudo apt-get install libusb-1.0-0-dev libftdi1-dev python3-dev python3-distutils
 ```
 
 3. Compile
