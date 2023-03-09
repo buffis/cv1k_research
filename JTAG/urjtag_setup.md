@@ -23,7 +23,7 @@ Make sure that ./configure states that libusb, libftdi and python are present.
 ```
 ./configure 
 make
-make install
+sudo make install
 sudo ldconfig # I had some weird issues until I ran this too
 ```
 
