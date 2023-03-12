@@ -19,7 +19,11 @@ class K9F1G08U0MJtag(object):
         urjtag.loglevel(urjtag.URJ_LOG_LEVEL_WARNING)
         self.c = urjtag.chain()
     
-    def connect(self): self.c.cable("UsbBlaster")
+    def connect(self):
+        self.c.cable("UsbBlaster")
+        # TODO: Add a flag for using Tigard.
+        # self.c.cable("ft2232", "vid=0x403", "pid=0x6010", "interface=1")
+        
     def detect(self): self.c.tap_detect()
     def cs(self, enabled): self.c.poke(CS_ADDR, 1 if enabled else 0)
 
