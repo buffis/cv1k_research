@@ -51,7 +51,9 @@ Notes:
 
 ### Altera USB Blaster pinouts
 
+```
 UrJTAG cable cmd: cable UsbBlaster
+```
 
 ```
  ________
@@ -66,10 +68,12 @@ UrJTAG cable cmd: cable UsbBlaster
 
 ### Tigard pinouts and setup
 
+```
 MODE switch: JTAG
 TARGET switch: VTGT 
 
 UrJTAG cable cmd: cable ft2232 vid=0x403 pid=0x6010 interface=1
+```
 
 ```
  _____
