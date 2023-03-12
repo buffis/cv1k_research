@@ -6,12 +6,10 @@ This page documents how to connect to the JTAG port of CV1000 PCBs, and how to i
 
 **I TAKE NO RESPONSIBILITY FOR YOUR HARDWARE. THE INFORMATION HERE SHOULD ONLY BE CONSIDERED INFORMATIONAL ONLY AND MAY CONTAIN MISTAKES. DON'T USE IT UNLESS YOU UNDERSTAND WHAT IT IS DOING AND ARE WILLING TO DOUBLE CHECK EACH STEP.**
 
-**This research is WIP, and have not yet been fully double checked for mistakes**
-
 ## Hardware + software needed
 
 - CV1000 PCB
-- Altera USB Blaster (or clone)
+- UrJTAG compatible JTAG adapter (Tested with Altera USB Blaster and Tigard)
 - Computer running urjtag for SH-3 (see [urjtag_setup.md](urjtag_setup.md) for instructions)
 
 Getting urjtag running with SH-3 takes a bit of extra work so **make sure you read the instructions**.
@@ -40,8 +38,22 @@ CV1000 S1
 |_____|
 ```
 
+## JTAG Adapters
+
+This has been tested with Altera USB Blaster as well as Tigard.
+
+Notes:
+- Hookup VCC VTARGET to a stable +3.3V source on the board.
+- ASEBRKAK should not be used
+- Only one GND pin needs to be connected
+- Ignore the pins marked N/A
+- It's good (but not required) to connect TRST to the USB Blaster,  but that pin needs to be used to get the device into JTAG mode. See below.
+
+### Altera USB Blaster pinouts
+
+UrJTAG cable cmd: cable UsbBlaster
+
 ```
- Altera USB Blaster
  ________
 |        |
 | 10  9  |  10: GND          9: TDI
@@ -52,12 +64,26 @@ CV1000 S1
 |________|
 ```
 
-Notes:
-- Hookup VCC VTARGET to a stable +3.3V source on the board.
-- ASEBRKAK should not be used
-- Only one GND pin needs to be connected
-- Ignore the pins marked N/A on the Altera USB Blaster
-- It's good (but not required) to connect TRST to the USB Blaster,  but that pin needs to be used to get the device into JTAG mode. See below.
+### Tigard pinouts and setup
+
+MODE switch: JTAG
+TARGET switch: VTGT 
+
+UrJTAG cable cmd: cable ft2232 vid=0x403 pid=0x6010 interface=1
+
+```
+ _____
+|     |
+| 1   |  VCC TARGET
+| 2   |  GND
+| 3   |  TCK
+| 4   |  TDI
+| 5   |  TDO
+| 6   |  TMS
+| 7   |  TRST
+| 8   |  N/A
+|_____|
+```
 
 ## Getting the PCB into reset hold mode for JTAG
 
