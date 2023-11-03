@@ -1,8 +1,8 @@
 # Replacing U2 with other NAND Flash 
 
-By default, CV1000 comes with a K9F1G08U0M NAND Flash placed at U2. This chip is long obsolete, and the best way to find them is to try to find NOS chips from online auctions. These may come with bad blocks present, which complicates swapping out chips for repair.
+By default, CV1000 comes with a K9F1G08U0 NAND Flash placed at U2. This chip is long obsolete, and the best way to find them is to try to find NOS chips from online auctions. These may come with bad blocks present, which complicates swapping out chips for repair.
 
-By default, trying other Flash IC's with the same structure and interface does not work, since all CV1000 games does a manufacturer check at startup to make sure that U2 is in fact a K9F1G08U0M, and if another chip is detected, the games goes into an infinite loop and wont start.
+By default, trying other Flash IC's with the same structure and interface does not work, since all CV1000 games does a manufacturer check at startup to make sure that U2 is in fact a K9F1G08U0, and if another chip is detected, the games goes into an infinite loop and wont start.
 
 This project describes what these checks are, and how to patch them out to allow using other compatible chips.
 
@@ -68,7 +68,7 @@ At startup, CV1000 games does the following check for Flash IC's that are compat
     page_size = 0x210;
     pages_per_block = 0x20;
   }
-  if ((man_id == 0xec) && (id_code == 0xf1)) {  // <- This is K9F1G08U0M
+  if ((man_id == 0xec) && (id_code == 0xf1)) {  // <- This is K9F1G08U0
     flash_type = 2;
     num_blocks = 0x400;
     page_size = 0x840;
