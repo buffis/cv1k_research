@@ -6,7 +6,7 @@
 
 import sys
 import os
-import swap
+import swap  # from ../U4_Utils/
 import hashlib
 
 def to_byte(x, size=1): return x.to_bytes(size, byteorder="big")
