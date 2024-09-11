@@ -1,9 +1,11 @@
 # Usage:
-# python extract_audio.py u23 u24
+# To dump mp2 files:
+#   python extract_audio.py u23 u24
+# To dump metadata:
+#   python extract_audio.py u23 u24 metadata
 
 import sys
 import os
-from telnetlib import NOP
 import swap
 import hashlib
 
