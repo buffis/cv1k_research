@@ -19,10 +19,11 @@ class K9F1G08U0MJtag(object):
         urjtag.loglevel(urjtag.URJ_LOG_LEVEL_WARNING)
         self.c = urjtag.chain()
     
-    def connect(self):
-        self.c.cable("UsbBlaster")
-        # TODO: Add a flag for using Tigard.
-        # self.c.cable("ft2232", "vid=0x403", "pid=0x6010", "interface=1")
+    def connect(self, use_tigard):
+        if use_tigard:
+            self.c.cable("ft2232", "vid=0x403", "pid=0x6010", "interface=1")
+        else:
+            self.c.cable("UsbBlaster")
         
     def detect(self): self.c.tap_detect()
     def cs(self, enabled): self.c.poke(CS_ADDR, 1 if enabled else 0)
@@ -99,8 +100,8 @@ class JtagProgrammer(object):
     def __init__(self):
         self.jtag = K9F1G08U0MJtag()
 
-    def setup(self):
-        self.jtag.connect()
+    def setup(self, use_tigard):
+        self.jtag.connect(use_tigard)
         self.jtag.detect()
         self.jtag.reset()
 
@@ -159,10 +160,9 @@ class JtagProgrammer(object):
             print("Writing block:", block)
             for block_page in range(64):
                 page = block * 64 + block_page
-                print("Writing page:", page)
                 self.jtag.cs(1)
                 status = self.jtag.write_page(page, infile.read(2112))
-                print ("Write status:", status)
+                #print ("Write status:", status)
                 self.jtag.cs(0)
 
 def fail(msg):
@@ -171,9 +171,9 @@ def fail(msg):
 
 def show_scary_warning():
     print ("""This operation can easily harm your PCB.
-If you are sure you want to do this, please enter "I know this can harm my pcb" to continue.""")
+If you are sure you want to do this, please enter "yes" to continue.""")
     x = input()
-    if x != "I know this can harm my pcb":
+    if x != "yes":
         fail("User aborted")
 
 if __name__ == "__main__":
@@ -183,10 +183,11 @@ if __name__ == "__main__":
     p.add_argument('--filename', type=str)
     p.add_argument('--block', type=int, default=0)
     p.add_argument('--page', type=int, default=0)
+    p.add_argument('--tigard', type=bool, default=False)
     args = p.parse_args()
 
     jtag = JtagProgrammer()
-    jtag.setup()
+    jtag.setup(args.tigard)
     
     if args.cmd == "read_id":     jtag.read_id()
     elif args.cmd == "read_all":  jtag.read_all(args.filename)
@@ -194,15 +195,9 @@ if __name__ == "__main__":
     elif args.cmd == "bad_blocks": jtag.read_bad_block_table()
     elif args.cmd == "write_block":
         show_scary_warning()
-        bad_blocks = jtag.read_bad_block_table()
-        if bad_blocks:
-            fail("Write not supported for PCB with bad U2 blocks: %s" % str(bad_blocks))
         jtag.write_blocks(args.filename, args.block, args.block+1)
     elif args.cmd == "write_all":
         show_scary_warning()
-        bad_blocks = jtag.read_bad_block_table()
-        if bad_blocks:
-            fail("Write not supported for PCB with bad U2 blocks: %s" % str(bad_blocks))
         jtag.write_blocks(args.filename, 0, 1024)
     else: fail("Unsupported cmd: %s" % args.cmd)
 
