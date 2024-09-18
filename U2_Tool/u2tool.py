@@ -13,6 +13,7 @@
 #   that store that in NAND.
 
 import argparse
+import binascii
 import sys
 
 PAGE_SIZE = 0x840
@@ -64,7 +65,7 @@ def adjust_data(clean_file, out_file, bad_blocks):
         while clean_file.tell() < BLOCK_SIZE:
             next_asset = clean_file.read(4)
             block = int.from_bytes(next_asset, "big")
-            if block >= 1024:  # Reached end of assets.
+            if block >= 1024 or block == 0:  # Reached end of assets.
                 out_file.write(next_asset)
                 out_file.write(clean_file.read(12))
                 break
@@ -90,6 +91,38 @@ def adjust_data(clean_file, out_file, bad_blocks):
         out_file.write(block_data)
         cur_block += 1
 
+class Sprite(object):
+    def __init__(self, index, block, offset, length, compression):
+        self.index = index
+        self.block = block
+        self.offset = offset
+        self.length = length
+        self.compression = compression
+    def address(self):
+        return self.block * BLOCK_SIZE + self.offset
+
+def print_checksums(infile):
+    f = open(infile, "rb")
+    f.seek(PAGE_SIZE)
+
+    index = 0
+    sprites = []
+    while True:
+        block = int.from_bytes(f.read(4), "big")
+        offset = int.from_bytes(f.read(4), "big")
+        length = int.from_bytes(f.read(4), "big")
+        compression = f.read(4)
+        if block >= 1024 or (block + offset + length) == 0:  # Reached end of assets.
+            break
+        sprites.append(Sprite(index, block, offset, length, compression))
+        index += 1        
+    
+    for sprite in sprites:
+        f.seek(sprite.address())
+        data = f.read(sprite.length)
+        crc = "{0:#0{1}x}".format(binascii.crc32(data), 10)
+        print (sprite.index, crc)
+
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument('cmd', type=str)
@@ -106,3 +139,5 @@ if __name__ == "__main__":
     if args.cmd == "adjust":
         bad_blocks = list([int(x.strip()) for x in args.bad_blocks.split(",")])
         adjust_data(args.infile, args.outfile, bad_blocks)
+    if args.cmd == "checksums":
+        print_checksums(args.infile)
