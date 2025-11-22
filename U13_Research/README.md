@@ -107,6 +107,13 @@ This can be programmed to a EPM7032AE in TQFP package using Beeprog2C or any oth
 
 The file to program is "cv1k.pof".
 
+### Programming using JTAG
+
+It is apparently also possible to program EPM7032 using JTAG by following the [instructions by huluhala in this thread](
+https://www.arcade-projects.com/threads/t.35798/#post-482010). Use QuartusProject\cv1k.jam.
+
+I have not tried this myself, but seems to work!
+
 ## Some more pics
 
 ![chips](/U13_Research/pics/chips.jpg "Original with two custom")
